@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewData["Title"] = "HW01";
+}
+
+<h1>HW01</h1>
+<table id="tableEmployee" class="table table-bordered  table-hover">
+   
+    <tbody>
+    </tbody>
+</table>
+@section Scripts{
+    <script src="~/js/travel.js"></script>
+    <script>
+        console.log(spots);
+        const datas = spots.CommonFormat.Section.map(x => 
+        {
+            const { CAT1,CAT2, stitle, xbody, address,file}=x;
+            const truncatedXbody = xbody.length > 50 ? xbody.substring(0, 50) + '...' : xbody;
+            const imgURLs = Array.isArray(file.img) ? file.img.map(img => img.text) : [];
+            return (
+           `
+          <div class="card" style="width: 18rem;">
+          <img src="${imgURLs[0]}" class="card-img-top" alt="123">
+          <div class="card-body">
+          <h5 class="card-title">${stitle}</h5>
+          <p class="card-text">${truncatedXbody}</p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">${CAT1}</li>
+            <li class="list-group-item">${CAT2}</li>
+            <li class="list-group-item">${address}</li>
+          </ul>
+          </div>
+           `
+            )
+        })
+        document.querySelector('#tableEmployee>tbody').innerHTML = datas.join("");
+    </script>
+    }

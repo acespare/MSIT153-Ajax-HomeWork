@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewData["Title"] = "HW02";
+}
+
+<h1>HW02</h1>
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <form id="memberForm" method="post" action="~/api/register">
+            <div class="mb-3">
+                <label for="inputName" class="form-label">姓名</label>
+                <input type="text" class="form-control" id="inputName" name="name">
+                <div id="div2" class="alert alert-info"></div>
+            </div>
+            <div class="mb-3">
+                <label for="inputEmail" class="form-label">電子郵件</label>
+                <input type="email" class="form-control" id="inputEmail" name="email">
+            </div>
+            <div class="mb-3">
+                <label for="inputAge" class="form-label">年紀</label>
+                <input type="number" class="form-control" id="inputAge" name="age">
+            </div>
+            <div class="mb-3">
+                <label for="formFile" class="form-label">檔案上傳</label>
+                <input class="form-control" type="file" id="formFile" name="formFile">
+            </div>
+            <button id="buttonSubmit" type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div id="div1" class="alert alert-info"></div>
+    </div>
+    <div class="col-3"></div>
+</div>
+
+@section Scripts{
+    <script>
+        const btn = document.querySelector('#buttonSubmit');
+        const divMessage = document.querySelector('#div1');
+        const name = document.querySelector('#inputName');
+        const email = document.querySelector('#inputEmail');
+        const age = document.querySelector('#inputAge');
+        btn.addEventListener('click', event => {
+            event.preventDefault();
+
+               //建立Ajax物件
+               const xhr =  new XMLHttpRequest();
+
+               //接收資料
+               xhr.addEventListener('load',()=>{
+                   const data = xhr.responseText;
+                   divMessage.innerHTML = data;
+               })
+               //建立FormData物件
+               const formData = new FormData(document.querySelector('#memberForm'));
+               //發出要求
+               xhr.open('POST','@Url.Content("~/api/register")');
+             //  xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+               //xhr.send(`name=${name.value}&age=${age.value}&email=${email.value}`);
+               xhr.send(formData);
+        })
+        const divCheck = document.querySelector('#div2');
+        const txtName = document.querySelector('#inputName');
+        txtName.addEventListener('blur',()=>{
+            const xhr = new XMLHttpRequest();
+            xhr.addEventListener('load',()=>{
+                const data = xhr.responseText;
+                divCheck.innerHTML = data;
+            })
+            const formData = new FormData(document.querySelector('#memberForm'));
+            xhr.open('POST', '@Url.Content("~/api/checkAcount")');
+            xhr.send(formData);
+        })
+       
+
+    </script>
+}
+
+
